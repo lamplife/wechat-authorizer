@@ -3,7 +3,7 @@
 
 安装
 
-	composer require firstphp/wechat:"2.0"
+	composer require firstphp/wechat:"2.1"
 
 
 配置
