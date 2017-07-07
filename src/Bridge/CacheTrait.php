@@ -1,6 +1,6 @@
 <?php
 
-namespace Thenbsp\Wechat\Bridge;
+namespace Firstphp\Wechat\Bridge;
 
 trait CacheTrait
 {

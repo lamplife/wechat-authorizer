@@ -1,145 +1,92 @@
 <?php
-
-namespace Thenbsp\Wechat\Bridge;
+/**
+ * Created by PhpStorm.
+ * User: ziwen
+ * Date: 2017/7/6
+ * Time: 下午7:28
+ */
+namespace Firstphp\Wechat\Bridge;
 
 use GuzzleHttp\Client;
-use Thenbsp\Wechat\Bridge\Serializer;
-use Thenbsp\Wechat\Wechat\AccessToken;
-use Doctrine\Common\Collections\ArrayCollection;
+use GuzzleHttp\Exception\ClientException;
 
-class Http
-{
-    /**
-     * Request Url
-     */
-    protected $uri;
+class Http {
 
     /**
-     * Request Method
+     * base uri
      */
-    protected $method;
+    const BASE_URI = 'https://api.weixin.qq.com/';
 
-    /**
-     * Request Body
-     */
-    protected $body;
+    protected $client;
+    protected $componentToken;
+    protected $componentAppid;
+    protected $authorizerToken;
 
-    /**
-     * Request Query
-     */
-    protected $query = array();
+    protected $uploadType;
 
-    /**
-     * Query With AccessToken
-     */
-    protected $accessToken;
 
-    /**
-     * SSL 证书
-     */
-    protected $sslCert;
-    protected $sslKey;
-
-    /**
-     * initialize
-     */
-    public function __construct($method, $uri)
+    public function __construct($baseUri = '')
     {
-        $this->uri      = $uri;
-        $this->method   = strtoupper($method);
+        $this->client = new Client([
+            'base_uri' => $baseUri ? $baseUri : static::BASE_URI,
+            'timeout' => 200,
+            'verify' => false,
+        ]);
     }
 
-    /**
-     * Create Client Factory
-     */
-    public static function request($method, $uri)
+
+    public function setComponentToken($componentToken)
     {
-        return new static($method, $uri);
+        $this->componentToken = $componentToken;
     }
 
-    /**
-     * Request Query
-     */
-    public function withQuery(array $query)
-    {
-        $this->query = array_merge($this->query, $query);
 
-        return $this;
+    public function setAuthorizerToken($authorizerToken)
+    {
+        $this->authorizerToken = $authorizerToken;
     }
 
-    /**
-     * Request Json Body
-     */
-    public function withBody(array $body)
-    {
-        $this->body = Serializer::jsonEncode($body);
 
-        return $this;
+    public function setUploadType($type)
+    {
+        $this->uploadType = $type;
     }
 
-    /**
-     * Request Xml Body
-     */
-    public function withXmlBody(array $body)
-    {
-        $this->body = Serializer::xmlEncode($body);
 
-        return $this;
+    public function setComponentId()
+    {
+        $this->componentAppid = config('wechat.component_id');
     }
 
-    /**
-     * Query With AccessToken
-     */
-    public function withAccessToken(AccessToken $accessToken)
+
+    public function __call($name, $arguments)
     {
-        $this->query['access_token'] = $accessToken->getTokenString();
-
-        return $this;
-    }
-
-    /**
-     * Request SSL Cert
-     */
-    public function withSSLCert($sslCert, $sslKey)
-    {
-        $this->sslCert = $sslCert;
-        $this->sslKey  = $sslKey;
-
-        return $this;
-    }
-
-    /**
-     * Send Request
-     */
-    public function send($asArray = true)
-    {
-        $options = array();
-
-        // query
-        if( !empty($this->query) ) {
-            $options['query'] = $this->query;
+        if ($this->componentToken) {
+            $arguments[0] .= (stripos($arguments[0], '?') ? '&' : '?').'component_access_token='.$this->componentToken;
         }
-
-        // body
-        if( !empty($this->body) ) {
-            $options['body'] = $this->body;
+        if ($this->componentAppid) {
+            $arguments[0] .= (stripos($arguments[0], '?') ? '&' : '?').'component_appid='.$this->componentAppid;
         }
-
-        // ssl cert
-        if( $this->sslCert && $this->sslKey ) {
-            $options['cert']    = $this->sslCert;
-            $options['ssl_key'] = $this->sslKey;
+        if ($this->authorizerToken) {
+            $arguments[0] .= (stripos($arguments[0], '?') ? '&' : '?').'access_token='.$this->authorizerToken;
         }
-
-        $response = (new Client)->request($this->method, $this->uri, $options);
-        $contents = $response->getBody()->getContents();
-
-        if( !$asArray ) {
-            return $contents;
+        if ($this->uploadType) {
+            $arguments[0] .= (stripos($arguments[0], '?') ? '&' : '?').'type='.$this->uploadType;
         }
-
-        $array = Serializer::parse($contents);
-
-        return new ArrayCollection($array);
+        // 添加代理
+        if (config('weixin.proxy')) {
+            if (isset($arguments[1])) {
+                $arguments[1] += ['proxy'=> config('wechat.proxy')];
+            } else {
+                $arguments[1] = ['proxy'=> config('wechat.proxy')];
+            }
+        }
+        $response = json_decode($this->client->$name($arguments[0], $arguments[1])->getBody()->getContents(), true);
+        if (isset($response['errcode']) && $response['errcode'] != 0) {
+            return $response;
+        }
+        return $response;
     }
+
+
 }
