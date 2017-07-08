@@ -1,14 +1,13 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: ziwen
+ * User: 狂奔的螞蟻 <www.firstphp.com>
  * Date: 2017/7/6
  * Time: 下午7:28
  */
 namespace Firstphp\Wechat\Bridge;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
 
 class Http {
 
@@ -74,7 +73,7 @@ class Http {
             $arguments[0] .= (stripos($arguments[0], '?') ? '&' : '?').'type='.$this->uploadType;
         }
         // 添加代理
-        if (config('weixin.proxy')) {
+        if (config('wechat.proxy')) {
             if (isset($arguments[1])) {
                 $arguments[1] += ['proxy'=> config('wechat.proxy')];
             } else {

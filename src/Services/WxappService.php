@@ -8,6 +8,7 @@
 
 namespace Firstphp\Wechat\Services;
 
+use Illuminate\Support\Facades\Request;
 use Firstphp\Wechat\Bridge\Http;
 use Firstphp\Wechat\Bridge\MsgCrypt;
 
@@ -51,7 +52,7 @@ class WxappService {
      */
     public function getAccessToken($verifyTicket = '')
     {
-        return $this->http->post('cgi-bi/component/api_component_token', [
+        return $this->http->post('cgi-bin/component/api_component_token', [
             'json' => [
                 'component_appid' => $this->appId,
                 'component_appsecret' => $this->appSecret,
@@ -75,11 +76,10 @@ class WxappService {
     /**
      * 获取预授权码
      */
-    public function getPreAuthCode($componentToken = '')
+    public function getPreAuthCode($accessToken = '')
     {
-        return $this->http->post('cgi-bi/component/api_component_token', [
+        return $this->http->post('cgi-bin/component/api_create_preauthcode?component_access_token='.$accessToken, [
             'json' => [
-                'component_access_token' => $componentToken,
                 'component_appid' => $this->appId
             ]
         ]);
@@ -89,10 +89,10 @@ class WxappService {
 
 
     /**
-     * 换取公众号的授权信息
+     * 换取公众号或小程序之授权信息
      */
-    public function queryAuth($authCode) {
-        return $this->http->post('cgi-bi/component/api_query_auth', [
+    public function queryAuth($authCode, $accessToken) {
+        return $this->http->post('cgi-bin/component/api_query_auth?component_access_token='.$accessToken, [
             'json' => [
                 'component_appid' => $this->appId,
                 'authorization_code' => $authCode

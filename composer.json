@@ -1,11 +1,11 @@
 {
     "name": "firstphp/wechat",
-    "description": "微信第三方授权",
+    "description": "微信第三方授权-适用于微信第三方平台开发者",
     "type": "library",
-    "keywords": ["微信", "微信授权", "微信第三方授权"],
+    "keywords": ["微信", "微信授权", "微信第三方授权", "微信API"],
     "homepage": "http://www.firstphp.com/",
     "license": "MIT",
-    "version": "2.1.1",
+    "version": "2.2",
     "authors": [
         {
             "name": "狂奔的蚂蚁",
