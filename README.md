@@ -9,7 +9,7 @@
 配置
 
 	在config/app.php中的providers数组中添加 Firstphp\Wechat\Providers\WechatServiceProvider::class
-	执行 php artisan vendor:publish --provider="Firstphp\Wechat\Facades\WechatServiceProvider” 用以生成配置文件
+	执行 php artisan vendor:publish --provider="Firstphp\Wechat\Facades\WechatServiceProvider" 用以生成配置文件
 
 
 编辑.env文件，设置如下：
