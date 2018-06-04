@@ -17,8 +17,13 @@ class WechatServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $configPath = __DIR__ . '/../Config/Wechat.php';
-        $this->publishes([$configPath => config_path('wechat.php')], 'config');
+        $this->publishes([
+            __DIR__.'/../Config/wechat.php' => config_path('wechat.php')
+        ], 'config');
+
+        $this->publishes([
+            __DIR__.'/../migrations/' => database_path('migrations')
+        ], 'migrations');
     }
 
     /**
