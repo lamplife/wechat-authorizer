@@ -1,15 +1,21 @@
 # wechat-authorizer
-微信第三方授权 for laravel5.4
+微信第三方授权 for laravel
 
-安装
+安装扩展
 
-	composer require firstphp/wechat:"2.3.2"
+	composer require firstphp/wechat:"2.4"
 
 
-配置
+注册服务
 
-	在config/app.php中的providers数组中添加 Firstphp\Wechat\Providers\WechatServiceProvider::class
-	执行 php artisan vendor:publish --provider="Firstphp\Wechat\Facades\WechatServiceProvider" 用以生成配置文件
+	在config/app.php中的providers数组中添加如下：
+	Firstphp\Wechat\Providers\WechatServiceProvider::class
+
+
+发布配置:
+
+	php artisan vendor:publish
+	[2 ] Provider: Firstphp\Wechat\Providers\WechatServiceProvider
 
 
 编辑.env文件，设置如下：
