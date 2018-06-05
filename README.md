@@ -18,6 +18,11 @@
 	[2 ] Provider: Firstphp\Wechat\Providers\WechatServiceProvider
 
 
+数据表迁移:
+
+    php artisan migrate
+
+
 编辑.env文件，设置如下：
 
 	COMPONENT_ID=1
