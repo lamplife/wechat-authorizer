@@ -12,18 +12,18 @@
 	Firstphp\Wechat\Providers\WechatServiceProvider::class
 
 
-发布配置:
+发布配置
 
 	php artisan vendor:publish
 	[2 ] Provider: Firstphp\Wechat\Providers\WechatServiceProvider
 
 
-数据表迁移:
+数据表迁移
 
     php artisan migrate
 
 
-编辑.env文件，设置如下：
+编辑.env文件，设置如下
 
 	COMPONENT_ID=1
 	WECHAT_APPID=wxda93db123lafdu83d
@@ -32,6 +32,6 @@
 	WECHAT_AES_KEY=mWm1DkAVBAZD2L1rs3QWKeoWa62wLumjqCXG9HifLdM
 
 
-示例代码：
+示例代码
 
 	use Firstphp\Wechat\Facades\WXFactory;
