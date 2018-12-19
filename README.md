@@ -3,7 +3,7 @@
 
 安装扩展
 
-	composer require firstphp/wechat:"2.4.1"
+	composer require firstphp/wechat:"2.5"
 
 
 注册服务
@@ -34,4 +34,4 @@
 
 示例代码
 
-	use Firstphp\Wechat\Facades\WXFactory;
+	use Firstphp\Wechat\Facades\WechatFactory;

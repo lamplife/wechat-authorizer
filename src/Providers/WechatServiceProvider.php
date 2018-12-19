@@ -2,7 +2,7 @@
 namespace Firstphp\Wechat\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Firstphp\Wechat\Services\WxappService;
+use Firstphp\Wechat\Services\WechatService;
 use Illuminate\Support\Facades\Config;
 
 class WechatServiceProvider extends ServiceProvider
@@ -17,13 +17,8 @@ class WechatServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->publishes([
-            __DIR__.'/../Config/wechat.php' => config_path('wechat.php')
-        ], 'config');
-
-        $this->publishes([
-            __DIR__.'/../migrations/' => database_path('migrations')
-        ], 'migrations');
+        $configPath = __DIR__ . '/../Config/Wechat.php';
+        $this->publishes([$configPath => config_path('wechat.php')], 'config');
     }
 
     /**
@@ -33,9 +28,9 @@ class WechatServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('WxappService', function () {
+        $this->app->singleton('WechatService', function () {
             $config = Config::get('wechat');
-            return new WxappService($config['appid'], $config['appsecret'], $config['token'], $config['encoding_aes_key']);
+            return new WechatService($config['appid'], $config['appsecret'], $config['token'], $config['encoding_aes_key']);
         });
 
     }
