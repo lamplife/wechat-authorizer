@@ -3,7 +3,7 @@
 
 安装扩展
 
-	composer require firstphp/wechat:"2.5"
+	composer require firstphp/wechat:"2.5.1"
 
 
 注册服务
