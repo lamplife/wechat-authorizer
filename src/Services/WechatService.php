@@ -50,7 +50,7 @@ class WechatService {
     /**
      * 获取第三方平台component_access_token
      */
-    public function getAccessToken2($verifyTicket = '')
+    public function getAccessToken($verifyTicket = '')
     {
         return $this->http->post('cgi-bin/component/api_component_token', [
             'json' => [
